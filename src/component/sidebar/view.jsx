@@ -28,6 +28,7 @@ import {
 import { styled } from "@mui/material/styles";
 import { dark, light, teal } from "../../theme/color";
 import { logout } from "../../Store/endpoint/authEnd";
+import logoSH from "../../../public/logo-white.svg";
 
 
 const sidebarWidth = 200;
@@ -108,7 +109,7 @@ export default function SidebarPage() {
       <CssBaseline />
       <AppBar position="fixed" sx={{ backgroundColor: teal[500], zIndex: 1201 }}>
         <Toolbar>
-          <MenuIcon sx={{ marginRight: 2 }} />
+          <img src={logoSH} alt="logo-sh" width="100%" style={{maxWidth: "40px", maxHeight: '40px', marginRight: 10}} />
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             MyToDoList
           </Typography>
