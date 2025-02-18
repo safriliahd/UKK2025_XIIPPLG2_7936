@@ -1,7 +1,15 @@
-export default function TasksPage () {
+import { Typography } from "@mui/material";
+import CategoryUI from "./add-category/view";
+import AddTaskUI from "./add-tasks/view";
+import AllTasksUI from "./all-tasks/view";
+
+export default function TasksPage() {
     return (
         <>
-        <h3>This Page is TaskPage</h3>
+            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', px: 2 }}>My Tasks</Typography>
+            <CategoryUI />
+            <AddTaskUI />
+            <AllTasksUI />
         </>
     )
 }
