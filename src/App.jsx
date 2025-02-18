@@ -5,6 +5,7 @@ import RegisterPage from "./component/auth/register";
 import TasksPage from "./component/tasks/view";
 import SidebarPage from "./component/sidebar/view";
 import DashboardPage from "./component/dashboard/view";
+import ProfileUser from "./component/profile_user/view";
 
 
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
         <Route path="/" element={<SidebarPage />}>
           <Route path="dashboard" element={<DashboardPage />} />
           <Route path="tasks" element={<TasksPage />} />
+          <Route path="profile" element={<ProfileUser />} />
         </Route>
       </Routes>
     </Router>

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink, Outlet, useNavigate } from "react-router-dom";
 import {
   AppBar,
@@ -27,11 +27,11 @@ import {
 } from "@mui/icons-material";
 import { styled } from "@mui/material/styles";
 import { dark, light, teal } from "../../theme/color";
-import { logout } from "../../Store/endpoint/authEnd";
+import { getUserById, logout } from "../../Store/endpoint/authEnd";
 import logoSH from "../../../public/logo-white.svg";
 
 
-const sidebarWidth = 200;
+const sidebarWidth = 220;
 
 const SidebarContainer = styled(Box)(({ theme }) => ({
   width: sidebarWidth,
@@ -67,7 +67,23 @@ export default function SidebarPage() {
   const [anchorEl, setAnchorEl] = useState(null);
   const [openDialog, setOpenDialog] = useState(false);
   const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
+  const [user, setUser] = useState(null);
   const open = Boolean(anchorEl);
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      const userId = localStorage.getItem('userId');
+      if (userId) {
+        try {
+          const response = await getUserById(userId);
+          setUser(response.user);
+        } catch (error) {
+          console.error('Failed to fetch user:', error.message);
+        }
+      }
+    };
+    fetchUser();
+  })
 
   const handleMenuOpen = (event) => {
     setAnchorEl(event.currentTarget);
@@ -76,6 +92,11 @@ export default function SidebarPage() {
   const handleMenuClose = () => {
     setAnchorEl(null);
   };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+    handleMenuClose();
+  }
 
   const handleLogoutClick = () => {
     setOpenDialog(true);
@@ -146,8 +167,12 @@ export default function SidebarPage() {
             sx={{ bgcolor: teal[500], cursor: "pointer", mx: "auto" }}
             onClick={handleMenuOpen}
           >
-            A
+            {user?.name ? user.name[0] : 'U'}
           </Avatar>
+          <Typography variant="subtitle1" sx={{mt: 1, color: teal[500]}}>
+            {user?.name || 'User'} 
+          </Typography>
+         
           <Menu
             anchorEl={anchorEl}
             open={open}
@@ -155,7 +180,12 @@ export default function SidebarPage() {
             anchorOrigin={{ vertical: "top", horizontal: "center" }}
             transformOrigin={{ vertical: "bottom", horizontal: "center" }}
           >
-            <MenuItem onClick={handleLogoutClick}>Logout</MenuItem>
+            <MenuItem onClick={handleProfileClick}>
+              Profile
+            </MenuItem>
+            <MenuItem onClick={handleLogoutClick}>
+              Logout
+            </MenuItem>
           </Menu>
         </Box>
       </SidebarContainer>
