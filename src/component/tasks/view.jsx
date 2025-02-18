@@ -7,8 +7,8 @@ export default function TasksPage() {
     return (
         <>
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', px: 2 }}>My Tasks</Typography>
-            <CategoryUI />
-            <AddTaskUI />
+            {/* <CategoryUI />
+            <AddTaskUI /> */}
             <AllTasksUI />
         </>
     )
