@@ -1,18 +1,20 @@
 import React, { useState } from "react";
-import { 
-  TextField, 
-  Button, 
-  Container, 
-  Typography, 
-  Paper, 
-  Box, 
-  Dialog, 
-  DialogTitle, 
-  DialogContent, 
-  DialogActions 
+import {
+  TextField,
+  Button,
+  Typography,
+  Paper,
+  Box,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Grid
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { register } from "../../Store/endpoint/authEnd";
+import ImageTeal from "../../../public/imageTeal.jpg"
+import { dark, light, teal } from "../../theme/color";
 
 export default function RegisterPage() {
   const [user, setUser] = useState({ username: "", password: "", email: "", name: "" });
@@ -48,7 +50,8 @@ export default function RegisterPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (passwordError) return; 
+    if (passwordError) return;
+
     try {
       const response = await register(user);
       console.log("Registration successful", response);
@@ -65,92 +68,223 @@ export default function RegisterPage() {
   };
 
   return (
-    <Container component="main" maxWidth="xs">
-      <Paper elevation={3} sx={{ p: 4, mt: 8 }}>
-        <Typography variant="h5" align="center" gutterBottom>
-          Register
-        </Typography>
-        {error && <Typography color="error">{error}</Typography>}
-        <Box component="form" onSubmit={handleSubmit}>
-          <TextField
-            fullWidth
-            label="Username"
-            name="username"
-            margin="normal"
-            variant="outlined"
-            value={user.username}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            fullWidth
-            label="Email"
-            name="email"
-            type="email"
-            margin="normal"
-            variant="outlined"
-            value={user.email}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            fullWidth
-            label="Name"
-            name="name"
-            margin="normal"
-            variant="outlined"
-            value={user.name}
-            onChange={handleChange}
-            required
-          />
-          <TextField
-            fullWidth
-            label="Password"
-            name="password"
-            type="password"
-            margin="normal"
-            variant="outlined"
-            value={user.password}
-            onChange={handleChange}
-            required
-            error={!!passwordError}
-            helperText={passwordError}
-          />
-          <Button 
-            type="submit" 
-            fullWidth 
-            variant="contained" 
-            sx={{ mt: 2 }}
-            disabled={!!passwordError} 
-          >
-            Register
-          </Button>
-          <Typography 
-            variant="body2" 
-            align="center" 
-            sx={{ mt: 1, cursor: "pointer" }} 
-            onClick={() => navigate("/")}
-          > 
-            Already have an account?{" "}
-            <Typography component="span" color="primary" sx={{ cursor: "pointer" }}>
-              Sign In
-            </Typography>
-          </Typography>
-        </Box>
-      </Paper>
+    <>
+      <Grid container component='main' sx={{ height: '98vh' }}>
+        <Grid
+          item
+          xs={false} sm={8} md={8}
+          sx={{
+            backgroundImage: `url(${ImageTeal})`,
+            backgroundSize: 'cover',
+            backgroundPosition: 'center'
+          }}
+        />
 
-      {/* Dialog Registrasi Berhasil */}
-      <Dialog open={openDialog} onClose={handleDialogClose}>
-        <DialogTitle>Registration Successful</DialogTitle>
-        <DialogContent>
-          <Typography>Your account has been created successfully. You can now sign in.</Typography>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleDialogClose} color="primary" autoFocus>
-            OK
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Container>
+        <Grid
+          item
+          xs={12} sm={4} md={4}
+          component={Paper}
+          elevation={6}
+          square
+          sx={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            justifyContent: 'center',
+            padding: 4,
+            backgroundColor: teal[500],
+          }}
+        >
+          <Typography variant="h5" align="center" gutterBottom sx={{color: light[100], fontWeight: 'bold'}}>
+            Sing Up
+          </Typography>
+          {error && <Typography color="error">{error}</Typography>}
+          <Box component="form" onSubmit={handleSubmit}>
+            <TextField
+              fullWidth
+              label="Username"
+              name="username"
+              margin="normal"
+              variant="outlined"
+              value={user.username}
+              onChange={handleChange}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: 'white',
+                  "&.Mui-focused": {
+                    borderColor: 'white',
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: 'white',
+                  "&.Mui-focused": {
+                    color: 'white',
+                  },
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: 'white',
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: 'white',
+                },
+              }}
+              inputProps={{
+                style: {
+                  color: 'white',
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Email"
+              name="email"
+              type="email"
+              margin="normal"
+              variant="outlined"
+              value={user.email}
+              onChange={handleChange}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: 'white',
+                  "&.Mui-focused": {
+                    borderColor: 'white',
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: 'white',
+                  "&.Mui-focused": {
+                    color: 'white',
+                  },
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: 'white',
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: 'white',
+                },
+              }}
+              inputProps={{
+                style: {
+                  color: 'white',
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Name"
+              name="name"
+              margin="normal"
+              variant="outlined"
+              value={user.name}
+              onChange={handleChange}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: 'white',
+                  "&.Mui-focused": {
+                    borderColor: 'white',
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: 'white',
+                  "&.Mui-focused": {
+                    color: 'white',
+                  },
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: 'white',
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: 'white',
+                },
+              }}
+              inputProps={{
+                style: {
+                  color: 'white',
+                },
+              }}
+            />
+            <TextField
+              fullWidth
+              label="Password"
+              name="password"
+              type="password"
+              margin="normal"
+              variant="outlined"
+              value={user.password}
+              onChange={handleChange}
+              error={!!passwordError}
+              helperText={passwordError}
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  color: 'white',
+                  "&.Mui-focused": {
+                    borderColor: 'white',
+                  },
+                },
+                "& .MuiInputLabel-root": {
+                  color: 'white',
+                  "&.Mui-focused": {
+                    color: 'white',
+                  },
+                },
+                "& .MuiOutlinedInput-notchedOutline": {
+                  borderColor: 'white',
+                },
+                "&:hover .MuiOutlinedInput-notchedOutline": {
+                  borderColor: 'white',
+                },
+              }}
+              inputProps={{
+                style: {
+                  color: 'white',
+                },
+              }}
+            />
+            <Button
+              type="submit"
+              fullWidth
+              variant="contained"
+              disabled={!!passwordError}
+              sx={{
+                mt: 2,
+                backgroundColor: light[200],
+                color: teal[700],
+                fontWeight: 'bold',
+                '&:hover': {
+                  backgroundColor: light[100],
+                  color: teal[500],
+                },
+              }}
+            >
+              Register
+            </Button>
+            <Typography
+              variant="body2"
+              align="center"
+              sx={{ mt: 1, cursor: "pointer", color: light[100] }}
+              onClick={() => navigate("/")}
+            >
+              Already have an account?{" "}
+              <Typography component="span" color="primary" sx={{ cursor: "pointer", color: light[100] }}>
+                Sign In
+              </Typography>
+            </Typography>
+          </Box>
+        </Grid>
+
+        {/* Dialog Registrasi Berhasil */}
+        <Dialog open={openDialog} onClose={handleDialogClose}>
+          <DialogTitle>Registration Successful</DialogTitle>
+          <DialogContent>
+            <Typography>Your account has been created successfully. You can now sign in.</Typography>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleDialogClose} color="primary" autoFocus>
+              OK
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Grid>
+    </>
   );
 }

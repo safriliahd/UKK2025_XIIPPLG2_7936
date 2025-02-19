@@ -21,7 +21,7 @@ export default function DashboardPage() {
             <Container maxWidth="sm">
                 <Box textAlign="center" mt={5} p={3} sx={{ margin: 'auto' }}>
                     {/* <Typography variant="h4" sx={{ textAlign: 'center' }}>UKK2025_XIIPPLG2_7936</Typography> */}
-                    <Typography variant="h4" fontWeight='bold'>Home Page</Typography>
+                    <Typography variant="h4" fontWeight='bold' color={teal[700]}>Home Page</Typography>
                     {user ? (
                         <>
                         <Typography variant="h5" color={teal[500]} mt={2} fontWeight='bold'>

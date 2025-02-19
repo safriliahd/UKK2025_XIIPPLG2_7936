@@ -1,14 +1,11 @@
 import { Typography } from "@mui/material";
-import CategoryUI from "./add-category/view";
-import AddTaskUI from "./add-tasks/view";
 import AllTasksUI from "./all-tasks/view";
+import { teal } from "../../theme/color";
 
 export default function TasksPage() {
     return (
         <>
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', px: 2 }}>My Tasks</Typography>
-            {/* <CategoryUI />
-            <AddTaskUI /> */}
+            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', px: 2, color: teal[700] }}>My Tasks</Typography>
             <AllTasksUI />
         </>
     )

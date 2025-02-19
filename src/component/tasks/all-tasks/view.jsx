@@ -83,10 +83,6 @@ export default function AllTasksUI() {
     );
   }
 
-  const handleDateFilter = (date) => {
-    setSelectedDate(date); 
-  };
-
   const filteredTasks = tasks.filter((task) => {
     const taskDate = new Date(task.date).toISOString().split("T")[0]; 
     return (

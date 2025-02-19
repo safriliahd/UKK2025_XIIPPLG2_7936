@@ -31,7 +31,7 @@ import { getUserById, logout } from "../../Store/endpoint/authEnd";
 import logoSH from "../../../public/logo-white.svg";
 
 
-const sidebarWidth = 220;
+const sidebarWidth = 200;
 
 const SidebarContainer = styled(Box)(({ theme }) => ({
   width: sidebarWidth,
@@ -113,6 +113,7 @@ export default function SidebarPage() {
       setOpenDialog(false);
       setOpenSuccessDialog(true);
       setTimeout(() => {
+        localStorage.removeItem("isAuthenticated");
         navigate("/");
       }, 2000);
     } catch (error) {
@@ -170,7 +171,7 @@ export default function SidebarPage() {
             {user?.name ? user.name[0] : 'U'}
           </Avatar>
           <Typography variant="subtitle1" sx={{mt: 1, color: teal[500]}}>
-            {user?.name || 'User'} 
+            {`@${user?.username || 'User'}`} 
           </Typography>
          
           <Menu
