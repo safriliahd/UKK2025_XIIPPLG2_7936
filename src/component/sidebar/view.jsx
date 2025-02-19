@@ -198,11 +198,11 @@ export default function SidebarPage() {
 
       {/* Konfirmasi Logout */}
       <Dialog open={openDialog} onClose={handleCancelLogout}>
-        <DialogTitle>{"Are you sure you want to logout?"}</DialogTitle>
-        <DialogContent>
+        <DialogTitle fontWeight='bold'>{"Are you sure you want to logout?"}</DialogTitle>
+        <DialogContent sx={{width: '500px'}}>
           <Typography>Once logged out, you will be redirected to the login page.</Typography>
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "center" }}>
+        <DialogActions sx={{ justifyContent: "right" }}>
           <Button onClick={handleCancelLogout} color="secondary">
             Cancel
           </Button>

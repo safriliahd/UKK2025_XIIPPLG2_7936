@@ -178,8 +178,8 @@ export default function CategoryUI() {
                 </Menu>
 
                 <Dialog open={open} onClose={handleClose}>
-                    <DialogTitle>{editMode ? "Edit Category" : "Add Category"}</DialogTitle>
-                    <DialogContent>
+                    <DialogTitle fontWeight='bold'>{editMode ? "Edit Category" : "Add Category"}</DialogTitle>
+                    <DialogContent sx={{width: '500px'}}>
                         <TextField
                             label="Category Name"
                             fullWidth
@@ -195,8 +195,8 @@ export default function CategoryUI() {
                 </Dialog>
 
                 <Dialog open={confirmDeleteOpen} onClose={handleDeleteConfirmClose}>
-                    <DialogTitle>Confirm Deletion</DialogTitle>
-                    <DialogContent>Are you sure you want to delete this category?</DialogContent>
+                    <DialogTitle fontWeight='bold'>Confirm Deletion</DialogTitle>
+                    <DialogContent sx={{width: '500px'}}>Are you sure you want to delete this category?</DialogContent>
                     <DialogActions>
                         <Button onClick={handleDeleteConfirmClose} color="secondary">Cancel</Button>
                         <Button onClick={handleDelete} color="error">Delete</Button>

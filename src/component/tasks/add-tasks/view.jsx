@@ -91,7 +91,7 @@ export default function AddTaskUI() {
     
 
     return (
-        <Box px={2}>
+        <Box>
             <Grid container spacing={2} justifyContent="flex-end">
                 <Grid item xs={12} sm="auto">
                     <Button
@@ -116,8 +116,8 @@ export default function AddTaskUI() {
 
             {/* Dialog Add Task */}
             <Dialog open={open} onClose={handleClose}>
-                <DialogTitle>Add New Task</DialogTitle>
-                <DialogContent>
+                <DialogTitle fontWeight='bold'>Add New Task</DialogTitle>
+                <DialogContent sx={{width: '500px'}}>
                     {error && <Typography color="error">{error}</Typography>}
                     <FormControl fullWidth margin="dense" disabled={loading || !!error}>
                         <InputLabel>Select Category</InputLabel>

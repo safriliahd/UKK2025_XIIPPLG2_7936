@@ -43,6 +43,7 @@ export default function AllTasksUI() {
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
   const [deleteDialog, setDeleteDialog] = useState({ open: false, taskId: null });
+  const [editDialog, setEditDialog] = useState({ open: false, task: null });
 
   const userId = Number(localStorage.getItem("userId"));
 
@@ -73,6 +74,7 @@ export default function AllTasksUI() {
 
     fetchData();
   }, [userId]);
+
 
   const handleComplete = async (taskId) => {
     try {
@@ -114,10 +116,27 @@ export default function AllTasksUI() {
     } catch (error) {
       setSnackbar({ open: true, message: error.message, severity: "error" });
     } finally {
-      setTimeout(() => {
-        window.location.reload();
-      }, 1000);
       handleCloseDeleteDialog();
+    }
+  };
+
+  const handleOpenEditDialog = (task) => {
+    setEditDialog({ open: true, task });
+  };
+
+  const handleCloseEditDialog = () => {
+    setEditDialog({ open: false, task: null });
+  };
+
+  const handleEdit = async () => {
+    try {
+      await editTask(editDialog.task.id, { task: editDialog.task.task });
+      setTasks((prevTasks) => prevTasks.map((t) => (t.id === editDialog.task.id ? editDialog.task : t)));
+      setSnackbar({ open: true, message: "Task updated successfully", severity: "success" });
+    } catch (error) {
+      setSnackbar({ open: true, message: error.message, severity: "error" });
+    } finally {
+      handleCloseEditDialog();
     }
   };
 
@@ -187,7 +206,7 @@ export default function AllTasksUI() {
                 variant="outlined"
               />
             </FormControl>
-
+            
             {(selectedCategory || selectedStatus || selectedDate) && (
               <Button
                 variant="outlined"
@@ -210,13 +229,12 @@ export default function AllTasksUI() {
               </Button>
             )}
           </Box>
-
           <AddTaskUI />
         </Box>
 
-        <Box p={2}>
-          <TableContainer component={Paper}>
-            <Table>
+        <Box px={2}>
+          <TableContainer component={Paper} sx={{ maxHeight: '45vh', overflow: 'auto' }}>
+            <Table stickyHeader>
               <TableHead>
                 <TableRow>
                   <TableCell sx={headerCellStyle}>ID</TableCell>
@@ -239,7 +257,7 @@ export default function AllTasksUI() {
                     <TableRow key={task.id}>
                       <TableCell sx={{ textAlign: 'center' }}>{task.id}</TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>{new Date(task.date).toLocaleDateString()}</TableCell>
-                      <TableCell sx={{ textAlign: 'center' }}>{task.task}</TableCell>
+                      <TableCell sx={{ textAlign: 'center', width: '350px' }}>{task.task}</TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>{categories[task.categoryId] || "Unknown"}</TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>{task.status === "COMPLETE" ? "Completed" : "Pending"}</TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>
@@ -248,14 +266,14 @@ export default function AllTasksUI() {
                             <Undo />
                           </IconButton>
                         ) : (
-                          <IconButton sx={{ color: teal[500] }} onClick={() => handleComplete(task.id)}>
+                          <IconButton onClick={() => handleComplete(task.id)} sx={{ color: teal[500] }}>
                             <CheckCircle />
                           </IconButton>
                         )}
-                        <IconButton sx={{ color: teal[800] }} >
+                        <IconButton onClick={() => handleOpenEditDialog(task)} sx={{ color: teal[800] }}>
                           <Edit />
                         </IconButton>
-                        <IconButton color="error" onClick={() => handleOpenDeleteDialog(task.id)}>
+                        <IconButton onClick={() => handleOpenDeleteDialog(task.id)} color="error">
                           <Delete />
                         </IconButton>
                       </TableCell>
@@ -280,8 +298,8 @@ export default function AllTasksUI() {
           </Snackbar>
 
           <Dialog open={deleteDialog.open} onClose={handleCloseDeleteDialog}>
-            <DialogTitle>Confirm Delete</DialogTitle>
-            <DialogContent>
+            <DialogTitle fontWeight='bold'>Confirm Delete</DialogTitle>
+            <DialogContent sx={{width: '500px'}}>
               <DialogContentText>Are you sure you want to delete this task?</DialogContentText>
             </DialogContent>
             <DialogActions>
@@ -290,6 +308,16 @@ export default function AllTasksUI() {
             </DialogActions>
           </Dialog>
 
+          <Dialog open={editDialog.open} onClose={handleCloseEditDialog}>
+            <DialogTitle fontWeight='bold'>Edit Task</DialogTitle>
+            <DialogContent sx={{width: '500px'}}>
+              <TextField fullWidth label="Task"           variant="standard" value={editDialog.task?.task || ''} onChange={(e) => setEditDialog((prev) => ({ ...prev, task: { ...prev.task, task: e.target.value } }))} />
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseEditDialog} color="secondary">Cancel</Button>
+              <Button onClick={handleEdit} color="primary">Save</Button>
+            </DialogActions>
+          </Dialog>
         </Box>
       </Box>
     </>
