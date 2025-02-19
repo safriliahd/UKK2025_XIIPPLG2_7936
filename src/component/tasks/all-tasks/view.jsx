@@ -25,7 +25,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { Edit, Delete, CheckCircle, Undo } from "@mui/icons-material";
+import { Edit, Delete, CheckCircle, Undo} from "@mui/icons-material";
 import { getTasks, deleteTask, completeTask, undoTask, editTask } from "../../../Store/endpoint/tasksEnd";
 import { getCategories } from "../../../Store/endpoint/categoryEnd";
 import { light, teal } from "../../../theme/color";
@@ -73,7 +73,29 @@ export default function AllTasksUI() {
     fetchData();
   }, [userId]);
 
+  const handleComplete = async (taskId) => {
+    try {
+      await completeTask(taskId);
+      setTasks((prevTasks) =>
+        prevTasks.map((t) => (t.id === taskId ? { ...t, status: "COMPLETE" } : t))
+      );
+      setSnackbar({ open: true, message: "Task completed", severity: "success" });
+    } catch (error) {
+      setSnackbar({ open: true, message: error.message, severity: "error" });
+    }
+  };
 
+  const handleUndo = async (taskId) => {
+    try {
+      await undoTask(taskId);
+      setTasks((prevTasks) =>
+        prevTasks.map((t) => (t.id === taskId ? { ...t, status: "PENDING" } : t))
+      );
+      setSnackbar({ open: true, message: "Task marked as pending", severity: "info" });
+    } catch (error) {
+      setSnackbar({ open: true, message: error.message, severity: "error" });
+    }
+  };
 
   if (loading) {
     return (
@@ -199,15 +221,15 @@ export default function AllTasksUI() {
                       <TableCell sx={{ textAlign: 'center' }}>{task.status === "COMPLETE" ? "Completed" : "Pending"}</TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>
                         {task.status === "COMPLETE" ? (
-                          <IconButton color="warning">
+                          <IconButton onClick={() => handleUndo(task.id)} color="warning">
                             <Undo />
                           </IconButton>
                         ) : (
-                          <IconButton sx={{ color: teal[500] }}>
+                          <IconButton sx={{ color: teal[500] }} onClick={() => handleComplete(task.id)}>
                             <CheckCircle />
                           </IconButton>
                         )}
-                        <IconButton sx={{ color: teal[800] }}>
+                        <IconButton sx={{ color: teal[800] }} >
                           <Edit />
                         </IconButton>
                         <IconButton color="error">
