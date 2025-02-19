@@ -25,7 +25,7 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import { Edit, Delete, CheckCircle, Undo} from "@mui/icons-material";
+import { Edit, Delete, CheckCircle, Undo } from "@mui/icons-material";
 import { getTasks, deleteTask, completeTask, undoTask, editTask } from "../../../Store/endpoint/tasksEnd";
 import { getCategories } from "../../../Store/endpoint/categoryEnd";
 import { light, teal } from "../../../theme/color";
@@ -42,6 +42,7 @@ export default function AllTasksUI() {
   const [selectedCategory, setSelectedCategory] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const [deleteDialog, setDeleteDialog] = useState({ open: false, taskId: null });
 
   const userId = Number(localStorage.getItem("userId"));
 
@@ -97,6 +98,29 @@ export default function AllTasksUI() {
     }
   };
 
+  const handleOpenDeleteDialog = (taskId) => {
+    setDeleteDialog({ open: true, taskId });
+  };
+
+  const handleCloseDeleteDialog = () => {
+    setDeleteDialog({ open: false, taskId: null });
+  };
+
+  const handleDelete = async () => {
+    try {
+      await deleteTask(deleteDialog.taskId);
+      setTasks((prevTasks) => prevTasks.filter((task) => task.id !== deleteDialog.taskId));
+      setSnackbar({ open: true, message: "Task deleted successfully", severity: "success" });
+    } catch (error) {
+      setSnackbar({ open: true, message: error.message, severity: "error" });
+    } finally {
+      setTimeout(() => {
+        window.location.reload();
+      }, 1000);
+      handleCloseDeleteDialog();
+    }
+  };
+
   if (loading) {
     return (
       <Box display="flex" justifyContent="center" alignItems="center" height="100vh">
@@ -138,7 +162,6 @@ export default function AllTasksUI() {
                 ))}
               </Select>
             </FormControl>
-
 
             <FormControl sx={{ width: 200 }}>
               <InputLabel>Filter by Status</InputLabel>
@@ -232,7 +255,7 @@ export default function AllTasksUI() {
                         <IconButton sx={{ color: teal[800] }} >
                           <Edit />
                         </IconButton>
-                        <IconButton color="error">
+                        <IconButton color="error" onClick={() => handleOpenDeleteDialog(task.id)}>
                           <Delete />
                         </IconButton>
                       </TableCell>
@@ -240,7 +263,6 @@ export default function AllTasksUI() {
                   ))
                 )}
               </TableBody>
-
             </Table>
           </TableContainer>
           <TablePagination
@@ -256,6 +278,18 @@ export default function AllTasksUI() {
           <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
             <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
           </Snackbar>
+
+          <Dialog open={deleteDialog.open} onClose={handleCloseDeleteDialog}>
+            <DialogTitle>Confirm Delete</DialogTitle>
+            <DialogContent>
+              <DialogContentText>Are you sure you want to delete this task?</DialogContentText>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleCloseDeleteDialog} color="secondary">Cancel</Button>
+              <Button onClick={handleDelete} color="error" autoFocus>Delete</Button>
+            </DialogActions>
+          </Dialog>
+
         </Box>
       </Box>
     </>
