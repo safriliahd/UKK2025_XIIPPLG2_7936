@@ -136,7 +136,7 @@ export default function CategoryUI() {
 
     return (
         <>
-            <Box px={2}>
+            <Box px={2} pb={2} mb={3} mt={3} component={Paper}>
                 <Grid container spacing={2} alignItems="center">
                     <Grid item xs={12} sm={2}>
                         <Button

@@ -28,7 +28,7 @@ import {
 import { Edit, Delete, CheckCircle, Undo } from "@mui/icons-material";
 import { getTasks, deleteTask, completeTask, undoTask, editTask } from "../../../Store/endpoint/tasksEnd";
 import { getCategories } from "../../../Store/endpoint/categoryEnd";
-import { teal } from "../../../theme/color";
+import { light, teal } from "../../../theme/color";
 import CategoryUI from "../add-category/view";
 import AddTaskUI from "../add-tasks/view";
 
@@ -84,11 +84,11 @@ export default function AllTasksUI() {
   }
 
   const filteredTasks = tasks.filter((task) => {
-    const taskDate = new Date(task.date).toISOString().split("T")[0]; 
+    const taskDate = new Date(task.date).toISOString().split("T")[0];
     return (
       (selectedCategory === "" || String(task.categoryId) === selectedCategory) &&
       (selectedStatus === "" || task.status === selectedStatus) &&
-      (selectedDate === "" || taskDate === selectedDate) 
+      (selectedDate === "" || taskDate === selectedDate)
     );
   });
 
@@ -104,115 +104,137 @@ export default function AllTasksUI() {
         <CategoryUI />
       </Box>
 
-      <Box p={2} display="flex" justifyContent="space-between" alignItems="center">
-        <Box display="flex" gap={2}>
-          <FormControl sx={{ minWidth: 200 }}>
-            <InputLabel>Filter by Category</InputLabel>
-            <Select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
-              <MenuItem value="">All</MenuItem>
-              {Object.entries(categories).map(([id, name]) => (
-                <MenuItem key={id} value={id}>{name}</MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+      <Box component={Paper}>
+        <Box p={2} display="flex" justifyContent="space-between" alignItems="center">
+          <Box display="flex" gap={2}>
+            <FormControl sx={{ minWidth: 200 }}>
+              <InputLabel>Filter by Category</InputLabel>
+              <Select value={selectedCategory} onChange={(e) => setSelectedCategory(e.target.value)}>
+                <MenuItem value="">All</MenuItem>
+                {Object.entries(categories).map(([id, name]) => (
+                  <MenuItem key={id} value={id}>{name}</MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
 
-          <FormControl sx={{ width: 200 }}>
-            <InputLabel>Filter by Status</InputLabel>
-            <Select
-              value={selectedStatus}
-              onChange={(e) => setSelectedStatus(e.target.value)}
-            >
-              <MenuItem value="">All</MenuItem>
-              <MenuItem value="COMPLETE">Complete</MenuItem>
-              <MenuItem value="NOT_COMPLETE">Pending</MenuItem>
-            </Select>
-          </FormControl>
+            <FormControl sx={{ width: 200 }}>
+              <InputLabel>Filter by Status</InputLabel>
+              <Select
+                value={selectedStatus}
+                onChange={(e) => setSelectedStatus(e.target.value)}
+              >
+                <MenuItem value="">All</MenuItem>
+                <MenuItem value="COMPLETE">Complete</MenuItem>
+                <MenuItem value="NOT_COMPLETE">Pending</MenuItem>
+              </Select>
+            </FormControl>
 
-          <FormControl sx={{ width: 200 }}>
-            <TextField
-              label="Filter by Date"
-              type="date"
-              value={selectedDate || ""}
-              onChange={(e) => setSelectedDate(e.target.value)}
-              InputLabelProps={{
-                shrink: true,
-              }}
-              variant="outlined"
-            />
-          </FormControl>
+            <FormControl sx={{ width: 200 }}>
+              <TextField
+                label="Filter by Date"
+                type="date"
+                value={selectedDate || ""}
+                onChange={(e) => setSelectedDate(e.target.value)}
+                InputLabelProps={{
+                  shrink: true,
+                }}
+                variant="outlined"
+              />
+            </FormControl>
+
+            {(selectedCategory || selectedStatus || selectedDate) && (
+              <Button
+                variant="outlined"
+                onClick={() => {
+                  setSelectedCategory("");
+                  setSelectedStatus("");
+                  setSelectedDate("");
+                }}
+                sx={{
+                  borderColor: teal[500],
+                  color: teal[500],
+                  "&:hover": {
+                    backgroundColor: light[200],
+                    borderColor: teal[700],
+                    color: teal[700],
+                  },
+                }}
+              >
+                Clear Filters
+              </Button>
+            )}
+          </Box>
+
+          <AddTaskUI />
         </Box>
 
-        <AddTaskUI />
-      </Box>
-
-
-
-      <Box p={2}>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell sx={headerCellStyle}>ID</TableCell>
-                <TableCell sx={headerCellStyle}>Date</TableCell>
-                <TableCell sx={headerCellStyle}>Task</TableCell>
-                <TableCell sx={headerCellStyle}>Category</TableCell>
-                <TableCell sx={headerCellStyle}>Status</TableCell>
-                <TableCell sx={headerCellStyle}>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {filteredTasks.length === 0 ? (
+        <Box p={2}>
+          <TableContainer component={Paper}>
+            <Table>
+              <TableHead>
                 <TableRow>
-                  <TableCell colSpan={5} sx={{ textAlign: 'center', fontStyle: 'italic', color: 'gray' }}>
-                    There are no tasks
-                  </TableCell>
+                  <TableCell sx={headerCellStyle}>ID</TableCell>
+                  <TableCell sx={headerCellStyle}>Date</TableCell>
+                  <TableCell sx={headerCellStyle}>Task</TableCell>
+                  <TableCell sx={headerCellStyle}>Category</TableCell>
+                  <TableCell sx={headerCellStyle}>Status</TableCell>
+                  <TableCell sx={headerCellStyle}>Actions</TableCell>
                 </TableRow>
-              ) : (
-                filteredTasks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((task) => (
-                  <TableRow key={task.id}>
-                    <TableCell sx={{ textAlign: 'center' }}>{task.id}</TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>{new Date(task.date).toLocaleDateString()}</TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>{task.task}</TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>{categories[task.categoryId] || "Unknown"}</TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>{task.status === "COMPLETE" ? "Completed" : "Pending"}</TableCell>
-                    <TableCell sx={{ textAlign: 'center' }}>
-                      {task.status === "COMPLETE" ? (
-                        <IconButton color="warning">
-                          <Undo />
-                        </IconButton>
-                      ) : (
-                        <IconButton sx={{ color: teal[500] }}>
-                          <CheckCircle />
-                        </IconButton>
-                      )}
-                      <IconButton sx={{ color: teal[800] }}>
-                        <Edit />
-                      </IconButton>
-                      <IconButton color="error">
-                        <Delete />
-                      </IconButton>
+              </TableHead>
+              <TableBody>
+                {filteredTasks.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={5} sx={{ textAlign: 'center', fontStyle: 'italic', color: 'gray' }}>
+                      There are no tasks
                     </TableCell>
                   </TableRow>
-                ))
-              )}
-            </TableBody>
+                ) : (
+                  filteredTasks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((task) => (
+                    <TableRow key={task.id}>
+                      <TableCell sx={{ textAlign: 'center' }}>{task.id}</TableCell>
+                      <TableCell sx={{ textAlign: 'center' }}>{new Date(task.date).toLocaleDateString()}</TableCell>
+                      <TableCell sx={{ textAlign: 'center' }}>{task.task}</TableCell>
+                      <TableCell sx={{ textAlign: 'center' }}>{categories[task.categoryId] || "Unknown"}</TableCell>
+                      <TableCell sx={{ textAlign: 'center' }}>{task.status === "COMPLETE" ? "Completed" : "Pending"}</TableCell>
+                      <TableCell sx={{ textAlign: 'center' }}>
+                        {task.status === "COMPLETE" ? (
+                          <IconButton color="warning">
+                            <Undo />
+                          </IconButton>
+                        ) : (
+                          <IconButton sx={{ color: teal[500] }}>
+                            <CheckCircle />
+                          </IconButton>
+                        )}
+                        <IconButton sx={{ color: teal[800] }}>
+                          <Edit />
+                        </IconButton>
+                        <IconButton color="error">
+                          <Delete />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
 
-          </Table>
-        </TableContainer>
-        <TablePagination
-          rowsPerPageOptions={[5, 10, 25]}
-          component="div"
-          count={tasks.length}
-          rowsPerPage={rowsPerPage}
-          page={page}
-          onPageChange={(e, newPage) => setPage(newPage)}
-          onRowsPerPageChange={(e) => { setRowsPerPage(+e.target.value); setPage(0); }}
-        />
+            </Table>
+          </TableContainer>
+          <TablePagination
+            rowsPerPageOptions={[5, 10, 25]}
+            component="div"
+            count={tasks.length}
+            rowsPerPage={rowsPerPage}
+            page={page}
+            onPageChange={(e, newPage) => setPage(newPage)}
+            onRowsPerPageChange={(e) => { setRowsPerPage(+e.target.value); setPage(0); }}
+          />
 
-        <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
-          <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
-        </Snackbar>
+          <Snackbar open={snackbar.open} autoHideDuration={3000} onClose={() => setSnackbar({ ...snackbar, open: false })}>
+            <Alert severity={snackbar.severity}>{snackbar.message}</Alert>
+          </Snackbar>
+        </Box>
       </Box>
     </>
   );

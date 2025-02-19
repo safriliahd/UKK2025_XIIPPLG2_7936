@@ -5,7 +5,7 @@ import { teal } from "../../theme/color";
 export default function TasksPage() {
     return (
         <>
-            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', px: 2, color: teal[700] }}>My Tasks</Typography>
+            <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: teal[700] }}>My Tasks</Typography>
             <AllTasksUI />
         </>
     )
