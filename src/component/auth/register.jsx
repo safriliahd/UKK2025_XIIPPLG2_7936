@@ -96,7 +96,7 @@ export default function RegisterPage() {
           }}
         >
           <Typography variant="h5" align="center" gutterBottom sx={{color: light[100], fontWeight: 'bold'}}>
-            Sing Up
+            Sign Up
           </Typography>
           {error && <Typography color="error">{error}</Typography>}
           <Box component="form" onSubmit={handleSubmit}>

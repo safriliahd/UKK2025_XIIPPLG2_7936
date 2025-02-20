@@ -237,7 +237,7 @@ export default function AllTasksUI() {
             <Table stickyHeader>
               <TableHead>
                 <TableRow>
-                  <TableCell sx={headerCellStyle}>ID</TableCell>
+                  <TableCell sx={headerCellStyle}>No</TableCell>
                   <TableCell sx={headerCellStyle}>Date</TableCell>
                   <TableCell sx={headerCellStyle}>Task</TableCell>
                   <TableCell sx={headerCellStyle}>Category</TableCell>
@@ -253,9 +253,9 @@ export default function AllTasksUI() {
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredTasks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((task) => (
+                  filteredTasks.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage).map((task, index) => (
                     <TableRow key={task.id}>
-                      <TableCell sx={{ textAlign: 'center' }}>{task.id}</TableCell>
+                      <TableCell sx={{ textAlign: 'center' }}> {page * rowsPerPage + index + 1}</TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>{new Date(task.date).toLocaleDateString()}</TableCell>
                       <TableCell sx={{ textAlign: 'center', width: '350px' }}>{task.task}</TableCell>
                       <TableCell sx={{ textAlign: 'center' }}>{categories[task.categoryId] || "Unknown"}</TableCell>

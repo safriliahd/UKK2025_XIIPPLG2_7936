@@ -31,7 +31,7 @@ export default function ProfileUser() {
         <>
             <Container maxWidth='sm' >
                 <Paper elevation={3} sx={{ padding: 4, textAlign: 'center', marginTop: 5 }}>
-                    <Typography variant="h4" fontWeight='bold'>Your Profile</Typography>
+                    <Typography variant="h4" fontWeight='bold' color={teal[700]}>Your Profile</Typography>
                     <Avatar
                         sx={{ bgcolor: teal[500], width: 80, height: 80, fontSize: 36, mx: "auto", mt: 3 }}
                     >

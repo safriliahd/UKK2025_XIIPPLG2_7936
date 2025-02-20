@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { TextField, Button, Container, Typography, Paper, Box, Grid } from "@mui/material";
+import { TextField, Button, Container, Typography, Paper, Box, Grid, Dialog, DialogTitle, DialogContent, DialogActions, Collapse, Alert } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { login } from "../../Store/endpoint/authEnd";
 import ImageTeal from "../../../public/imageTeal.jpg"
@@ -8,6 +8,7 @@ import { light, teal } from "../../theme/color";
 export default function LoginPage() {
   const [user, setUser] = useState({ username: "", password: "" });
   const [error, setError] = useState("");
+  const [openSuccessDialog, setOpenSuccessDialog] = useState(false);
   const navigate = useNavigate();
 
   const handleChange = (e) => {
@@ -21,13 +22,18 @@ export default function LoginPage() {
       console.log("Login successful", response);
 
       localStorage.setItem("isAuthenticated", "true");
+      setOpenSuccessDialog(true);
 
-      setError("");
-      navigate("/dashboard");
+      // setError("");
     } catch (err) {
-      setError(err.message || "Login failed");
+      setError( "Login failed");
     }
   };
+
+  const handleSuccessDialogClose = () => {
+    setOpenSuccessDialog(false);
+    navigate("/dashboard");
+  }
 
   return (
     <>
@@ -59,10 +65,15 @@ export default function LoginPage() {
           }}
         >
           <Typography variant="h4" align="center" gutterBottom sx={{color: light[100], fontWeight: 'bold'}}>
-            Sing In
+            Sign In
           </Typography>
           {error && <Typography color="error">{error}</Typography>}
           <Box component="form" onSubmit={handleSubmit}>
+            <Collapse in={Boolean(error)}>
+              <Alert severity="error" sx={{mb: 2}}>
+                {error}
+              </Alert>
+            </Collapse>
             <TextField
               fullWidth
               label="Username"
@@ -159,6 +170,16 @@ export default function LoginPage() {
           >
             Don't have an account? <Typography component="span" sx={{ cursor: "pointer", color: light[100] }}>Sign Up</Typography>
           </Typography>
+
+          <Dialog open={openSuccessDialog} onClose={handleSuccessDialogClose}>
+            <DialogTitle fontWeight='bold'>Login Successful</DialogTitle>
+            <DialogContent sx={{width: '500px'}}>
+              <Typography>You have successfully logged in. The system will redirect you to the dashboard.</Typography>
+            </DialogContent>
+            <DialogActions>
+              <Button onClick={handleSuccessDialogClose} color="primary">OK</Button>
+            </DialogActions>
+          </Dialog>
         </Grid>
       </Grid>
     </>

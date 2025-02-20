@@ -214,11 +214,11 @@ export default function SidebarPage() {
 
       {/* Success Logout */}
       <Dialog open={openSuccessDialog} onClose={handleSuccessOk}>
-        <DialogTitle>{"Logout Successful"}</DialogTitle>
-        <DialogContent>
+        <DialogTitle fontWeight='bold'>Logout Successful</DialogTitle>
+        <DialogContent sx={{width: '500px'}}>
           <Typography>You have successfully logged out. Redirecting to login page...</Typography>
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "center" }}>
+        <DialogActions sx={{ justifyContent: "right" }}>
           <Button onClick={handleSuccessOk} color="primary">
             OK
           </Button>
